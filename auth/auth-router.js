@@ -36,10 +36,10 @@ router.post('/login', async (req, res, next) => {
     const payload = {
       userId : user.id
     }
-    const token = jwt.sign(payload, "whale")
+    const token = jwt.sign(payload, process.env.JWT_SECRET)
 
     res.cookie("token", token)
-    
+
     res.json({
       message : `Welcome ${user.username}!`,
       // token: token

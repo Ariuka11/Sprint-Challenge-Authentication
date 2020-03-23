@@ -3,7 +3,7 @@ const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require("cookie-parser")
 
-const authenticate = require('./auth/authenticate-middleware.js');
+const restrict = require('./auth/authenticate-middleware.js');
 const authRouter = require('./auth/auth-router.js');
 const jokesRouter = require('./jokes/jokes-router.js');
 
@@ -17,7 +17,7 @@ server.use(express.json());
 server.use(cookieParser())
 
 server.use('/api/auth', authRouter);
-server.use('/api/jokes', authenticate, jokesRouter);
+server.use('/api/jokes', restrict(), jokesRouter);
 
 server.get("/", (req, res) => {
     res.json({
@@ -31,6 +31,7 @@ server.use((err, req, res, next) => {
         message : "Something went wrong!"
     })
 })
+
 if(!module.parent){
     server.listen(PORT, () => {
         console.log(`\n=== Server listening on port ${PORT} ===\n`);
